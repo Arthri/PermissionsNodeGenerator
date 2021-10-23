@@ -44,6 +44,11 @@ namespace PermissionsNodeGenerator
             PermissionNode parent = null,
             IReadOnlyList<PermissionNode> children = null)
         {
+            if (name is null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
             Name = name;
             Parent = parent;
             Children = children ?? _emptyChildren;

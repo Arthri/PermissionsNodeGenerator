@@ -104,8 +104,7 @@ namespace PermissionsNodeGenerator
 
                     if (!IsValidName(name))
                     {
-                        throw null;
-                        // todo: invalid name
+                        throw new InvalidNameException(name);
                     }
 
                     var parentTuple = nodeStack.Peek();

@@ -83,21 +83,15 @@ namespace PermissionsNodeGenerator
                         }
                         while (indent < --depth);
                     }
-                    else if (indent == depth + 1)
+                    else if (indent > depth)
                     {
-                        if (previousTuple == (null, null))
+                        if (indent != depth + 1 || previousTuple == (null, null))
                         {
-                            throw null;
-                            // invalid format
+                            throw new UnexpectedDepthJumpException();
                         }
 
                         nodeStack.Push(previousTuple);
                         depth++;
-                    }
-                    else if (indent != depth)
-                    {
-                        throw null;
-                        // invalid format
                     }
 
                     string name = line.Trim();

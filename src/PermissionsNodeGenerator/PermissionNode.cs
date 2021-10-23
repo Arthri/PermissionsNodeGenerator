@@ -26,13 +26,7 @@ namespace PermissionsNodeGenerator
         /// <summary>
         /// Gets the children of this node.
         /// </summary>
-        public IReadOnlyList<PermissionNode> Children { get; }
-
-        /// <summary>
-        /// Gets an empty read-only list of children.
-        /// </summary>
-        /// <remarks>A read-only list is immutable, therefore it can be safely reused.</remarks>
-        private static readonly IReadOnlyList<PermissionNode> _emptyChildren = Array.AsReadOnly(new PermissionNode[0]);
+        public List<PermissionNode> Children { get; }
 
         /// <summary>
         /// Initializes a new instance of <see cref="PermissionNode"/>.
@@ -42,7 +36,7 @@ namespace PermissionsNodeGenerator
         internal PermissionNode(
             string name,
             PermissionNode parent = null,
-            IReadOnlyList<PermissionNode> children = null)
+            List<PermissionNode> children = null)
         {
             if (name is null)
             {
@@ -51,7 +45,7 @@ namespace PermissionsNodeGenerator
 
             Name = name;
             Parent = parent;
-            Children = children ?? _emptyChildren;
+            Children = children ?? new List<PermissionNode>();
 
             if (parent != null)
             {

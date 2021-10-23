@@ -59,7 +59,7 @@ namespace PermissionsNodeGenerator
             }
             else
             {
-                Path = "";
+                Path = name;
             }
         }
 

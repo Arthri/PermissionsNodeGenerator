@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PermissionsNodeGenerator
 {
@@ -20,7 +21,13 @@ namespace PermissionsNodeGenerator
         /// <summary>
         /// Gets the children of this node.
         /// </summary>
-        public List<PermissionNode> Children { get; }
+        public IReadOnlyList<PermissionNode> Children { get; }
+
+        /// <summary>
+        /// Gets an empty read-only list of children.
+        /// </summary>
+        /// <remarks>A read-only list is immutable, therefore it can be safely reused.</remarks>
+        private static readonly IReadOnlyList<PermissionNode> _emptyChildren = Array.AsReadOnly(new PermissionNode[0]);
 
         /// <summary>
         /// Initializes a new instance of <see cref="PermissionNode"/>.
@@ -29,11 +36,12 @@ namespace PermissionsNodeGenerator
         /// <param name="parent">The parent of the node.</param>
         internal PermissionNode(
             string name,
-            PermissionNode parent = null)
+            PermissionNode parent = null,
+            IReadOnlyList<PermissionNode> children = null)
         {
             Name = name;
             Parent = parent;
-            Children = new List<PermissionNode>();
+            Children = children ?? _emptyChildren;
         }
     }
 }

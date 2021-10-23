@@ -58,20 +58,18 @@ namespace PermissionsNodeGenerator
         /// <returns>An array of permissions nodes representing the parsed document.</returns>
         public static IReadOnlyList<PermissionNode> Parse(Stream stream)
         {
-            var rootNode = new PermissionNode("", null);
+            // A stack representing the hierachy of nodes
+            var nodeStack = new Stack<(PermissionNode parent, List<PermissionNode> children)>();
+            nodeStack.Push((null, new List<PermissionNode>()));
+
+            // The depth, also known as the indent count to read for
+            var depth = 0;
+
+            // The last node parsed
+            (PermissionNode, List<PermissionNode>) previousTuple = default;
 
             using (var reader = new StreamReader(stream))
             {
-                // A stack representing the hierachy of nodes
-                var nodeStack = new Stack<PermissionNode>();
-                nodeStack.Push(rootNode);
-
-                // The depth, also known as the indent to read for
-                var depth = 0;
-
-                // The last node parsed
-                PermissionNode previousNode = null;
-
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -87,13 +85,13 @@ namespace PermissionsNodeGenerator
                     }
                     else if (indent == depth + 1)
                     {
-                        if (previousNode is null)
+                        if (previousTuple == (null, null))
                         {
                             throw null;
                             // invalid format
                         }
 
-                        nodeStack.Push(previousNode);
+                        nodeStack.Push(previousTuple);
                         depth++;
                     }
                     else if (indent != depth)
@@ -110,17 +108,27 @@ namespace PermissionsNodeGenerator
                         // todo: invalid name
                     }
 
-                    var parent = nodeStack.Peek();
-                    var currentNode = new PermissionNode(name, parent);
-                    parent.Children.Add(currentNode);
+                    var parentTuple = nodeStack.Peek();
+                    var children = new List<PermissionNode>();
+                    var currentNode = new PermissionNode(
+                        name,
+                        parentTuple.parent,
+                        children.AsReadOnly());
+                    (PermissionNode, List<PermissionNode>) currentTuple = (currentNode, children);
+                    parentTuple.children.Add(currentNode);
 
-                    previousNode = currentNode;
+                    previousTuple = currentTuple;
                 }
             }
 
 
 
-            return rootNode.Children.AsReadOnly();
+            while (nodeStack.Count > 1)
+            {
+                nodeStack.Pop();
+            }
+
+            return nodeStack.Peek().children;
         }
     }
 }

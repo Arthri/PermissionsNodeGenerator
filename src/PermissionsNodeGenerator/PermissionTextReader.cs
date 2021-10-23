@@ -26,5 +26,26 @@
 
             return true;
         }
+
+        /// <summary>
+        /// Determines the indent count of the specified line.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>The number of indent.</returns>
+        public static int CountIndent(string line)
+        {
+            // The indent count
+            var i = 0;
+            for (; i < line.Length; i++)
+            {
+                var c = line[i];
+                if (c != ' ')
+                {
+                    break;
+                }
+            }
+
+            return i;
+        }
     }
 }

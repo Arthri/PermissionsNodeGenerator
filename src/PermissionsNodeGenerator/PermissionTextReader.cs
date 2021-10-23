@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace PermissionsNodeGenerator
 {
@@ -76,6 +77,8 @@ namespace PermissionsNodeGenerator
 
                     if (indent < depth)
                     {
+                        // Indent dropped, therefore current node(s) has ended
+                        // Keeps dropping until indent matches
                         do
                         {
                             nodeStack.Pop();
@@ -84,15 +87,23 @@ namespace PermissionsNodeGenerator
                     }
                     else if (indent > depth)
                     {
+                        // Currently, allow only 1-depth jump
+                        // If previousNode is null, then there is no parent
+                        // to add to yet. Currently the only applicable case
+                        // is a direct jump from 0 depth to 1 depth on the
+                        // very first node of the document.
                         if (indent != depth + 1 || previousNode == null)
                         {
                             throw new UnexpectedDepthJumpException();
                         }
 
+                        // Indent jumped, push children and increase depth
                         nodeStack.Push(previousNode.Children);
                         depth++;
                     }
 
+                    // Trim excess space
+                    // TODO: factor to CountIndent possibly
                     string name = line.Trim();
 
                     if (!IsValidName(name))
@@ -100,13 +111,18 @@ namespace PermissionsNodeGenerator
                         throw new InvalidNameException(name);
                     }
 
+                    // Search for parent node
                     var childrenOfGrandparents = nodeStack.Skip(1).First();
                     var parentNode = childrenOfGrandparents.First();
+
+                    // Get siblings list
                     var siblings = nodeStack.Peek();
                     var you = new PermissionNode(
                         name,
                         parentNode,
                         new List<PermissionNode>());
+
+                    // Append myself
                     siblings.Add(you);
 
                     previousNode = you;
@@ -115,11 +131,13 @@ namespace PermissionsNodeGenerator
 
 
 
+            // Pop all except root
             while (nodeStack.Count > 1)
             {
                 nodeStack.Pop();
             }
 
+            // Return root collection
             return nodeStack.Peek();
         }
     }

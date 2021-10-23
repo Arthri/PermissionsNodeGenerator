@@ -5,12 +5,12 @@ namespace PermissionsNodeGenerator
     /// <summary>
     /// Represents a node in a permission tree.
     /// </summary>
-    public readonly struct PermissionNode
+    public class PermissionNode
     {
         /// <summary>
         /// Gets the parent of this node.
         /// </summary>
-        public PermissionNode? Parent { get; }
+        public PermissionNode Parent { get; }
 
         /// <summary>
         /// Gets the name of this node.
@@ -29,7 +29,7 @@ namespace PermissionsNodeGenerator
         /// <param name="parent">The parent of the node.</param>
         internal PermissionNode(
             string name,
-            PermissionNode? parent = null)
+            PermissionNode parent = null)
         {
             Name = name;
             Parent = parent;

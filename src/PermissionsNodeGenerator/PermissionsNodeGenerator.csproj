@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PackageLicenseExpression>MIT-0</PackageLicenseExpression>
+    <Version>0.0.1</Version>
+    <Authors>Arthri</Authors>
+    <Company>Arthri</Company>
+    <Description>Converts .ptxt to C# classes</Description>
+    <Copyright>Copyright © Arthri 2021</Copyright>
+    <PackageProjectUrl>https://github.com/Arthri/PermissionsNodeGenerator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Arthri/PermissionsNodeGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +21,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 
 </Project>

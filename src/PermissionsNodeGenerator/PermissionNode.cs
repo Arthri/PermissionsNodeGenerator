@@ -14,6 +14,11 @@ namespace PermissionsNodeGenerator
         public PermissionNode Parent { get; }
 
         /// <summary>
+        /// Gets the path of this node.
+        /// </summary>
+        public string Path { get; }
+
+        /// <summary>
         /// Gets the name of this node.
         /// </summary>
         public string Name { get; }
@@ -42,6 +47,25 @@ namespace PermissionsNodeGenerator
             Name = name;
             Parent = parent;
             Children = children ?? _emptyChildren;
+
+            if (parent != null)
+            {
+                Path = parent.GetPermission(name);
+            }
+            else
+            {
+                Path = "";
+            }
+        }
+
+        /// <summary>
+        /// Returns <see cref="Path"/> prepended to the specified name, separated by a period.
+        /// </summary>
+        /// <param name="name">The name</param>
+        /// <returns><inheritdoc cref="GetPermission(string)" path="/summary"/></returns>
+        public string GetPermission(string name)
+        {
+            return Path + "." + name;
         }
     }
 }

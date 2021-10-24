@@ -25,6 +25,18 @@
 
   <ItemGroup>
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <Content Include="PermissionsText.xml">
+      <Pack>true</Pack>
+      <PackagePath>build\;buildTransitive\</PackagePath>
+    </Content>
+    <Content Include="PermissionsNodeGenerator.props">
+        <Pack>true</Pack>
+        <PackagePath>build\;buildTransitive\</PackagePath>
+    </Content>
+    <Content Include="PermissionsNodeGenerator.targets">
+        <Pack>true</Pack>
+        <PackagePath>build\;buildTransitive\</PackagePath>
+    </Content>
   </ItemGroup>
 
 </Project>

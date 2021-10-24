@@ -23,7 +23,12 @@ namespace PermissionsNodeGenerator
         {
             var targetFiles = context
                 .AdditionalFiles
-                .Where(af => af.Path.EndsWith(".ptxt"));
+                .Where(f =>
+                    context
+                        .AnalyzerConfigOptions
+                        .GetOptions(f)
+                        .TryGetValue("build_metadata.AdditionalFiles.SourceItemGroup", out var sourceItemGroup)
+                    && sourceItemGroup == "PermissionsText");
 
             foreach (var file in targetFiles)
             {

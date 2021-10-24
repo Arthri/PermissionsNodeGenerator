@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://github.com/Arthri/PermissionsNodeGenerator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Arthri/PermissionsNodeGenerator</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <NoWarn>NU5128;</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

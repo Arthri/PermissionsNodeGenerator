@@ -91,8 +91,12 @@ namespace PermissionsNodeGenerator
                     }
 
                     // Search for parent node
-                    var childrenOfGrandparents = nodeStack.Skip(1).First();
-                    var parentNode = childrenOfGrandparents.First();
+                    PermissionNode parentNode = null;
+                    if (nodeStack.Count > 1)
+                    {
+                        var childrenOfGrandparents = nodeStack.Skip(1).First();
+                        parentNode = childrenOfGrandparents.First();
+                    }
 
                     // Get siblings list
                     var siblings = nodeStack.Peek();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -9,28 +10,6 @@ namespace PermissionsNodeGenerator
     /// </summary>
     public static class PermissionTextReader
     {
-        /// <summary>
-        /// Determines if the specified name is valid.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns><see langword="true"/> if the name is valid, otherwise <see langword="false"/>.</returns>
-        public static bool IsValidName(string name)
-        {
-            for (int i = 0; i < name.Length; i++)
-            {
-                char c = name[i];
-
-                if (c == '.')
-                {
-                    // Once we find an undesirable character, short circuit
-                    // and return false
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Determines the indent count of the specified line.
         /// </summary>
@@ -106,7 +85,7 @@ namespace PermissionsNodeGenerator
                     // TODO: factor to CountIndent possibly
                     string name = line.Trim();
 
-                    if (!IsValidName(name))
+                    if (!SyntaxFacts.IsValidIdentifier(name))
                     {
                         throw new InvalidNameException(name);
                     }

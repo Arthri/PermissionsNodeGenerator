@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PermissionsNodeGenerator
@@ -40,8 +41,33 @@ $@"namespace GeneratedPermissions
         /// <param name="indent">The indent.</param>
         private static void GenerateClassOrConst(IReadOnlyList<PermissionNode> list, StringBuilder sb, string indent = "")
         {
-            foreach (var node in list)
+            if (list.Count < 1)
             {
+                return;
+            }
+
+            var firstNode = list[0];
+            if (firstNode.Children.Count == 0)
+            {
+                sb.AppendLine($"{indent}public const string {firstNode.Name} = \"{firstNode.Path.ToLower()}\";");
+            }
+            else
+            {
+                sb.AppendLine(
+$@"{indent}public static class {firstNode.Name}
+{indent}{{");
+
+                GenerateClassOrConst(firstNode.Children, sb, indent + "    ");
+
+                sb.AppendLine(
+$"{indent}}}");
+            }
+
+            for (var i = 1; i < list.Count; i++)
+            {
+                sb.Append(Environment.NewLine);
+
+                var node = list[i];
                 if (node.Children.Count == 0)
                 {
                     sb.AppendLine($"{indent}public const string {node.Name} = \"{node.Path.ToLower()}\";");

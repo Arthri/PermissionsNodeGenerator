@@ -5,4 +5,8 @@
     <None Remove="**\*.ptxt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Include="@(PermissionsText)" />
+  </ItemGroup>
+
 </Project>

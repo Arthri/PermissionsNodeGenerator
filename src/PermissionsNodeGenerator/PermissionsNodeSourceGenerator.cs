@@ -54,7 +54,7 @@ namespace PermissionsNodeGenerator
                 var generatedSource = PermissionsClassTemplater.GenerateTemplate(nodes, className);
 
                 context.AddSource(
-                    $"{className}.cs",
+                    $"{className}.g.cs",
                     SourceText.From(generatedSource, Encoding.UTF8));
             }
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
 using System.IO;
@@ -55,7 +55,7 @@ namespace PermissionsNodeGenerator
 
                 context.AddSource(
                     $"{className}.g.cs",
-                    SourceText.From(generatedSource, Encoding.UTF8));
+                    generatedSource);
             }
         }
     }

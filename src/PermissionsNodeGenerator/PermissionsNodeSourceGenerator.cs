@@ -79,39 +79,6 @@ namespace PermissionsNodeGenerator
             }
         }
 
-        private static void ReportMultilineDiagnostic(
-            GeneratorExecutionContext context,
-            Diagnostic diagnostic)
-        {
-            var lines = diagnostic
-                .GetMessage()
-                .Split(
-                    new[]
-                    {
-                        Environment.NewLine
-                    },
-                    StringSplitOptions.RemoveEmptyEntries);
-
-            string[] customTags = diagnostic.Descriptor.CustomTags.ToArray();
-            foreach (var line in lines)
-            {
-                var partialDiagnostic = Diagnostic.Create(
-                    new DiagnosticDescriptor(
-                        diagnostic.Id,
-                        diagnostic.Descriptor.Title,
-                        line,
-                        diagnostic.Descriptor.Category,
-                        diagnostic.Severity,
-                        diagnostic.Descriptor.IsEnabledByDefault,
-                        diagnostic.Descriptor.Description,
-                        diagnostic.Descriptor.HelpLinkUri,
-                        customTags),
-                    diagnostic.Location);
-
-                context.ReportDiagnostic(partialDiagnostic);
-            }
-        }
-
         private static void ReportUnhandledExceptionDiagnostic(GeneratorExecutionContext context, Exception e)
         {
             var diagnostic = Diagnostic.Create(
@@ -124,7 +91,9 @@ namespace PermissionsNodeGenerator
                     true),
                 Location.None);
 
-            ReportMultilineDiagnostic(context, diagnostic);
+            diagnostic
+                .SplitMultilineDiagnostic()
+                .ReportTo(context);
         }
 
         private static void ReportCantParseExceptionDiagnostic(GeneratorExecutionContext context, Exception e, string path)
@@ -142,7 +111,9 @@ namespace PermissionsNodeGenerator
                     new TextSpan(),
                     new LinePositionSpan()));
 
-            ReportMultilineDiagnostic(context, diagnostic);
+            diagnostic
+                .SplitMultilineDiagnostic()
+                .ReportTo(context);
         }
     }
 }

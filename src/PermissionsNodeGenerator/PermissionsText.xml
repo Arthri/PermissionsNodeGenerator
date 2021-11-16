@@ -5,4 +5,29 @@
   <ItemType Name="PermissionsText" DisplayName="Permissions Text" />
   <FileExtension Name=".ptxt" ContentType="PermissionsText" />
 
+  <Rule Name="PermissionsText" DisplayName="Permissions Text" PageTemplate="tool">
+    <Rule.Categories>
+        <Category Name="Indent" DisplayName="Indent" />
+    </Rule.Categories>
+    <Rule.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="PermissionsText" HasConfigurationCondition="false" />
+    </Rule.DataSource>
+    <StringProperty
+      Name="IndentCharacter"
+      DisplayName="Indent Character"
+      Description="Specifies the character used for indentation."
+      Category="Indent"
+      Default=" "
+      IncludeInCommandLine="true"
+    />
+    <IntProperty
+      Name="IndentCount"
+      DisplayName="Indent Count"
+      Description="Specifies the amount of indent characters in each indent level."
+      Category="Indent"
+      Default="4"
+      MinValue="1"
+    />
+  </Rule>
+
 </ProjectSchemaDefinitions>

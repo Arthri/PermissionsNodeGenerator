@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using PermissionsNodeGenerator.Extensions;
 using System;
@@ -38,6 +39,8 @@ namespace PermissionsNodeGenerator
                         continue;
                     }
 
+                    var settings = CreateSettings(fileOptions);
+
                     IReadOnlyList<PermissionNode> nodes;
 
 
@@ -55,7 +58,7 @@ namespace PermissionsNodeGenerator
 
                         try
                         {
-                            nodes = PermissionTextReader.Parse(stream);
+                            nodes = PermissionTextReader.Parse(stream, settings);
                         }
                         catch (Exception e)
                         {
@@ -77,6 +80,25 @@ namespace PermissionsNodeGenerator
             {
                 ReportUnhandledExceptionDiagnostic(context, e);
             }
+        }
+
+        private static PermissionTextReaderSettings CreateSettings(AnalyzerConfigOptions options)
+        {
+            var settings = new PermissionTextReaderSettings();
+
+            var indentString = options.GetMetadata("IndentCharacter");
+            if (indentString.Length != 1)
+            {
+                throw new FormatException($"IndentCharacter must be a 1 character-long string{indentString}:");
+            }
+            else
+            {
+                settings.IndentCharacter = indentString[0];
+            }
+
+            settings.IndentCount = int.Parse(options.GetMetadata("IndentCount"));
+
+            return settings;
         }
 
         private static void ReportUnhandledExceptionDiagnostic(GeneratorExecutionContext context, Exception e)

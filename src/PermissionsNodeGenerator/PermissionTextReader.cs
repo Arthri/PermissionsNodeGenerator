@@ -15,8 +15,20 @@ namespace PermissionsNodeGenerator
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <returns>An array of permissions nodes representing the parsed document.</returns>
-        public static List<PermissionNode> Parse(Stream stream)
+        public static List<PermissionNode> Parse(Stream stream, PermissionTextReaderSettings settings = null)
         {
+            // Settings
+
+            if (settings == null)
+            {
+                settings = new();
+            }
+
+            var indentChar = settings.IndentCharacter;
+            var indentCount = settings.IndentCount;
+
+
+
             // A stack representing the hierachy of nodes
             var nodeStack = new Stack<List<PermissionNode>>();
             nodeStack.Push(new List<PermissionNode>());
@@ -29,20 +41,31 @@ namespace PermissionsNodeGenerator
             using (var reader = new StreamReader(stream))
             {
                 string line;
+                int lineNumber = 0;
                 while ((line = reader.ReadLine()) != null)
                 {
+                    lineNumber += 1;
+
                     // The indent count
-                    var indent = 0;
-                    for (; indent < line.Length; indent++)
+                    var indentCharCount = 0;
+                    for (; indentCharCount < line.Length; indentCharCount++)
                     {
-                        var c = line[indent];
-                        if (c != ' ')
+                        var c = line[indentCharCount];
+                        if (c != indentChar)
                         {
                             break;
                         }
                     }
 
-                    if (indent < depth)
+                    if (indentCharCount % indentCount != 0)
+                    {
+                        throw new InvalidIndentException(lineNumber, indentCharCount, indentChar, indentCount);
+                    }
+
+
+
+                    var indentLevel = indentCharCount / indentCount;
+                    if (indentLevel < depth)
                     {
                         // Indent dropped, therefore current node(s) has ended
                         // Keeps dropping until indent matches
@@ -50,16 +73,16 @@ namespace PermissionsNodeGenerator
                         {
                             nodeStack.Pop();
                         }
-                        while (indent < --depth);
+                        while (indentLevel < --depth);
                     }
-                    else if (indent > depth)
+                    else if (indentLevel > depth)
                     {
                         // Currently, allow only 1-depth jump
                         // If previousNode is null, then there is no parent
                         // to add to yet. Currently the only applicable case
                         // is a direct jump from 0 depth to 1 depth on the
                         // very first node of the document.
-                        if (indent != depth + 1 || previousNode == null)
+                        if (indentLevel != depth + 1 || previousNode == null)
                         {
                             throw new UnexpectedDepthJumpException();
                         }
@@ -69,9 +92,7 @@ namespace PermissionsNodeGenerator
                         depth++;
                     }
 
-                    // Trim excess space
-                    // TODO: factor to CountIndent possibly
-                    string name = line.Trim();
+                    string name = line.Substring(indentCharCount);
 
                     if (!SyntaxFacts.IsValidIdentifier(name))
                     {

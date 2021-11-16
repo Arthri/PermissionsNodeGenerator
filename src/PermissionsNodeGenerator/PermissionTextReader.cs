@@ -11,27 +11,6 @@ namespace PermissionsNodeGenerator
     public static class PermissionTextReader
     {
         /// <summary>
-        /// Determines the indent count of the specified line.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <returns>The indent count.</returns>
-        public static int CountIndent(string line)
-        {
-            // The indent count
-            var i = 0;
-            for (; i < line.Length; i++)
-            {
-                var c = line[i];
-                if (c != ' ')
-                {
-                    break;
-                }
-            }
-
-            return i;
-        }
-
-        /// <summary>
         /// Parses the specified stream as a permissions document.
         /// </summary>
         /// <param name="stream">The stream.</param>
@@ -52,7 +31,16 @@ namespace PermissionsNodeGenerator
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    var indent = CountIndent(line);
+                    // The indent count
+                    var indent = 0;
+                    for (; indent < line.Length; indent++)
+                    {
+                        var c = line[indent];
+                        if (c != ' ')
+                        {
+                            break;
+                        }
+                    }
 
                     if (indent < depth)
                     {

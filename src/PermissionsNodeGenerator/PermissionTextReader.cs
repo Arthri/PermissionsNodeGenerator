@@ -57,6 +57,12 @@ namespace PermissionsNodeGenerator
                         }
                     }
 
+                    if (indentCharCount == line.Length)
+                    {
+                        // Ignore blank lines
+                        continue;
+                    }
+
                     if (indentCharCount % indentCount != 0)
                     {
                         throw new InvalidIndentException(lineNumber, indentCharCount, indentChar, indentCount);

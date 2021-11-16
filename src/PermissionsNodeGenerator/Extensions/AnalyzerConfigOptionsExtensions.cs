@@ -13,7 +13,7 @@ namespace PermissionsNodeGenerator.Extensions
         /// <param name="analyzerConfigOptions">The analyzer options.</param>
         /// <param name="metadataName">The metadata name.</param>
         /// <returns>The value of the specified MSBuild item metadata.</returns>
-        public static string GetMetadata(this AnalyzerConfigOptions analyzerConfigOptions, string metadataName)
+        public static string? GetMetadata(this AnalyzerConfigOptions analyzerConfigOptions, string metadataName)
         {
             analyzerConfigOptions
                 .TryGetValue(

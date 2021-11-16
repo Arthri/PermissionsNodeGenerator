@@ -13,7 +13,7 @@ namespace PermissionsNodeGenerator.Extensions
         /// <param name="analyzerConfigOptions">The analyzer options.</param>
         /// <param name="propertyName">The property name.</param>
         /// <returns>The value of the specified MSBuild property.</returns>
-        public static string GetProperty(this AnalyzerConfigOptionsProvider analyzerConfigOptions, string propertyName)
+        public static string? GetProperty(this AnalyzerConfigOptionsProvider analyzerConfigOptions, string propertyName)
         {
             analyzerConfigOptions
                 .GlobalOptions

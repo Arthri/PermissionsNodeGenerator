@@ -1,5 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
+using PermissionsNodeGenerator.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,17 +25,18 @@ namespace PermissionsNodeGenerator
         {
             try
             {
-                var targetFiles = context
-                    .AdditionalFiles
-                    .Where(f =>
-                        context
-                            .AnalyzerConfigOptions
-                            .GetOptions(f)
-                            .TryGetValue("build_metadata.AdditionalFiles.SourceItemGroup", out var sourceItemGroup)
-                        && sourceItemGroup == "PermissionsText");
-
-                foreach (var file in targetFiles)
+                foreach (var file in context.AdditionalFiles)
                 {
+                    var fileOptions = context
+                        .AnalyzerConfigOptions
+                        .GetOptions(file);
+                    var fileSourceItemGroup = fileOptions.GetMetadata("SourceItemGroup");
+
+                    if (fileSourceItemGroup != "PermissionsText")
+                    {
+                        continue;
+                    }
+
                     IReadOnlyList<PermissionNode> nodes;
 
 

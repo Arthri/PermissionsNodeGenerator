@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
@@ -89,6 +89,7 @@ namespace PermissionsNodeGenerator
                     },
                     StringSplitOptions.RemoveEmptyEntries);
 
+            string[] customTags = diagnostic.Descriptor.CustomTags.ToArray();
             foreach (var line in lines)
             {
                 var partialDiagnostic = Diagnostic.Create(
@@ -101,7 +102,7 @@ namespace PermissionsNodeGenerator
                         diagnostic.Descriptor.IsEnabledByDefault,
                         diagnostic.Descriptor.Description,
                         diagnostic.Descriptor.HelpLinkUri,
-                        diagnostic.Descriptor.CustomTags.ToArray()),
+                        customTags),
                     diagnostic.Location);
 
                 context.ReportDiagnostic(partialDiagnostic);

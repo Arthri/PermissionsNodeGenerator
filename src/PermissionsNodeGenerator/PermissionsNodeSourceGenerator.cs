@@ -25,8 +25,9 @@ namespace PermissionsNodeGenerator
         {
             try
             {
-                foreach (var file in context.AdditionalFiles)
+                for (int i = 0; i < context.AdditionalFiles.Length; i++)
                 {
+                    var file = context.AdditionalFiles[i];
                     var fileOptions = context
                         .AnalyzerConfigOptions
                         .GetOptions(file);

@@ -45,26 +45,18 @@ namespace PermissionsNodeGenerator
 
 
                     var sourceText = file.GetText(context.CancellationToken);
-                    var text = sourceText.ToString();
+                    var lines = sourceText
+                        .Lines
+                        .Select(l => l.Span.ToString());
 
-                    using (var stream = new MemoryStream())
+                    try
                     {
-                        using (var reader = new StreamWriter(stream, Encoding.UTF8, 1024, true))
-                        {
-                            reader.Write(text);
-                        }
-
-                        stream.Seek(0, SeekOrigin.Begin);
-
-                        try
-                        {
-                            nodes = PermissionTextReader.Parse(stream, settings);
-                        }
-                        catch (Exception e)
-                        {
-                            ReportCantParseExceptionDiagnostic(context, e, file.Path);
-                            continue;
-                        }
+                        nodes = PermissionTextReader.Parse(lines, settings);
+                    }
+                    catch (Exception e)
+                    {
+                        ReportCantParseExceptionDiagnostic(context, e, file.Path);
+                        continue;
                     }
 
 

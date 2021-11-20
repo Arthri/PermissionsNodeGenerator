@@ -15,7 +15,7 @@
     <RepositoryType>git</RepositoryType>
     <NoWarn>NU5128;</NoWarn>
     <LangVersion>9.0</LangVersion>
-    <Nullable>enabled</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

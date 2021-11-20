@@ -5,10 +5,10 @@ namespace PermissionsNodeGenerator.Results.PTextReader
     /// <summary>
     /// Represents the result of a permissions text read operation.
     /// </summary>
-    public record PermissionsTextResult : IResult<IList<PermissionNode>>
+    public record PermissionsTextResult : IResult<List<PermissionNode>>
     {
         /// <inheritdoc />
-        public IList<PermissionNode>? Value { get; init; }
+        public List<PermissionNode>? Value { get; init; }
 
         /// <inheritdoc />
         object? IResult.Value => Value;

@@ -87,16 +87,36 @@ namespace PermissionsNodeGenerator
             var settings = new PermissionTextReaderSettings();
 
             var indentString = options.GetMetadata("IndentCharacter");
-            if (indentString.Length != 1)
+            if (indentString.Length == 0)
             {
-                throw new FormatException($"IndentCharacter must be a 1 character-long string{indentString}:");
+                // Do nothing and use default
             }
-            else
+            else if (indentString.Length == 1)
             {
                 settings.IndentCharacter = indentString[0];
             }
+            else if (indentString.Length == 3
+                  && indentString.StartsWith("'")
+                  && indentString.EndsWith("'"))
+            {
+                // Apostrophe notation 'char', eg. ' '
+                // to prevent MSBuild from trimming the space/tab character away
+                settings.IndentCharacter = indentString[1];
+            }
+            else
+            {
+                throw new FormatException($"IndentCharacter must be a 1 character-long string");
+            }
 
-            settings.IndentCount = int.Parse(options.GetMetadata("IndentCount"));
+            var indentCountString = options.GetMetadata("IndentCount");
+            if (indentCountString.Length == 0)
+            {
+                // Do nothing and use default
+            }
+            else
+            {
+                settings.IndentCount = int.Parse(indentCountString);
+            }
 
             return settings;
         }

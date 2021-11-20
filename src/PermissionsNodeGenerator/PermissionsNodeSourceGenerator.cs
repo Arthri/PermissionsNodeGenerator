@@ -45,6 +45,27 @@ namespace PermissionsNodeGenerator
 
 
                     var sourceText = file.GetText(context.CancellationToken);
+
+                    if (sourceText is null)
+                    {
+                        Diagnostic
+                            .Create(
+                                new DiagnosticDescriptor(
+                                    "PNSG0002",
+                                    "Source text is null",
+                                    "Source text for {0} is null",
+                                    "Other",
+                                    DiagnosticSeverity.Error,
+                                    true),
+                                Location.Create(
+                                    file.Path,
+                                    new TextSpan(),
+                                    new LinePositionSpan()),
+                                file.Path)
+                            .ReportTo(context);
+                        continue;
+                    }
+
                     var lines = sourceText
                         .Lines
                         .Select(l => l.Span.ToString());
@@ -79,7 +100,7 @@ namespace PermissionsNodeGenerator
             var settings = new PermissionTextReaderSettings();
 
             var indentString = options.GetMetadata("IndentCharacter");
-            if (indentString.Length == 0)
+            if (indentString == null || indentString.Length == 0)
             {
                 // Do nothing and use default
             }
@@ -101,7 +122,7 @@ namespace PermissionsNodeGenerator
             }
 
             var indentCountString = options.GetMetadata("IndentCount");
-            if (indentCountString.Length == 0)
+            if (indentCountString == null || indentCountString.Length == 0)
             {
                 // Do nothing and use default
             }

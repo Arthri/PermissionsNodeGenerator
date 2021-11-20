@@ -15,7 +15,7 @@ namespace PermissionsNodeGenerator
         /// </summary>
         /// <param name="lines">The lines to parse.</param>
         /// <returns>An array of permissions nodes representing the parsed document.</returns>
-        public static List<PermissionNode> Parse(IEnumerable<string> lines, PermissionTextReaderSettings settings = null)
+        public static List<PermissionNode> Parse(IEnumerable<string> lines, PermissionTextReaderSettings? settings = null)
         {
             // Settings
 
@@ -36,7 +36,7 @@ namespace PermissionsNodeGenerator
             // The depth, also known as the indent count to read for
             var depth = 0;
 
-            PermissionNode previousNode = null;
+            PermissionNode? previousNode = null;
 
             int lineNumber = 0;
             foreach (var line in lines)
@@ -103,7 +103,7 @@ namespace PermissionsNodeGenerator
                 }
 
                 // Search for parent node
-                PermissionNode parentNode = null;
+                PermissionNode? parentNode = null;
                 if (nodeStack.Count > 1)
                 {
                     var childrenOfGrandparents = nodeStack.Skip(1).First();
@@ -114,7 +114,7 @@ namespace PermissionsNodeGenerator
                 var siblings = nodeStack.Peek();
                 var you = new PermissionNode(
                     name,
-                    parentNode,
+                    parentNode!,
                     new List<PermissionNode>());
 
                 // Append myself

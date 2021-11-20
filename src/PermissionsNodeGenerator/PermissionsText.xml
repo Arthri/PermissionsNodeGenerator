@@ -17,7 +17,7 @@
       DisplayName="Indent Character"
       Description="Specifies the character used for indentation."
       Category="Indent"
-      Default=" "
+      Default="' '"
     />
     <IntProperty
       Name="IndentCount"

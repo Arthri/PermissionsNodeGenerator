@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using PermissionsNodeGenerator.Extensions;
 using PermissionsNodeGenerator.Results;
+using PermissionsNodeGenerator.Results.PTextReader;
 using PermissionsNodeGenerator.Results.Settings;
 using System;
 using System.Collections.Generic;
@@ -95,14 +96,43 @@ namespace PermissionsNodeGenerator
                         .Lines
                         .Select(l => l.Span.ToString());
 
+
+                    PermissionsTextResult parseResult;
                     try
                     {
-                        nodes = PermissionsTextReader.Parse(lines, settings.Value);
+                        parseResult = PermissionsTextReader.Parse(lines, settings.Value);
                     }
                     catch (Exception e)
                     {
                         ReportCantParseExceptionDiagnostic(context, e, file.Path);
                         continue;
+                    }
+
+                    if (!parseResult.Success)
+                    {
+                        Diagnostic
+                            .Create(
+                                new DiagnosticDescriptor(
+                                    "PSG1003",
+                                    "Unsuccessfully parsed permissions text",
+                                    parseResult.Message,
+                                    "Format",
+                                    parseResult.Value == null
+                                        ? DiagnosticSeverity.Warning
+                                        : DiagnosticSeverity.Error,
+                                    parseResult.Value == null),
+                                Location.Create(file.Path, new TextSpan(), new LinePositionSpan()))
+                            .SplitMultilineDiagnostic()
+                            .ReportTo(context);
+                    }
+
+                    if (parseResult.Value is null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        nodes = parseResult.Value;
                     }
 
 

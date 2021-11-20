@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
+using PermissionsNodeGenerator.Results.PTextReader;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +15,7 @@ namespace PermissionsNodeGenerator
         /// </summary>
         /// <param name="lines">The lines to parse.</param>
         /// <returns>An array of permissions nodes representing the parsed document.</returns>
-        public static IList<PermissionNode> Parse(IEnumerable<string> lines, PermissionsTextReaderSettings? settings = null)
+        public static PermissionsTextResult Parse(IEnumerable<string> lines, PermissionsTextReaderSettings? settings = null)
         {
             // Settings
 
@@ -61,7 +62,12 @@ namespace PermissionsNodeGenerator
 
                 if (indentCharCount % indentCount != 0)
                 {
-                    throw new InvalidIndentException(lineNumber, indentCharCount, indentChar, indentCount);
+                    return new PermissionsTextErrorResult
+                    {
+                        Message = "Invalid indent.",
+                        Line = lineNumber,
+                        LinePosition = indentCharCount,
+                    };
                 }
 
 
@@ -86,7 +92,12 @@ namespace PermissionsNodeGenerator
                     // very first node of the document.
                     if (indentLevel != depth + 1 || previousNode == null)
                     {
-                        throw new UnexpectedDepthJumpException();
+                        return new PermissionsTextErrorResult
+                        {
+                            Message = "Unexpected indent level jump.",
+                            Line = lineNumber,
+                            LinePosition = indentCharCount,
+                        };
                     }
 
                     // Indent jumped, push children and increase depth
@@ -98,7 +109,12 @@ namespace PermissionsNodeGenerator
 
                 if (!SyntaxFacts.IsValidIdentifier(name))
                 {
-                    throw new InvalidNameException(name);
+                    return new PermissionsTextErrorResult
+                    {
+                        Message = "Permissions name is not valid.",
+                        Line = lineNumber,
+                        LinePosition = indentCharCount,
+                    };
                 }
 
                 // Search for parent node
@@ -131,7 +147,11 @@ namespace PermissionsNodeGenerator
             }
 
             // Return root collection
-            return nodeStack.Peek();
+            return new PermissionsTextResult(true)
+            {
+                Value = nodeStack.Peek(),
+                Message = "Permissions text successfully read.",
+            };
         }
     }
 }

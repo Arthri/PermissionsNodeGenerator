@@ -48,7 +48,7 @@ namespace PermissionsNodeGenerator
                         Diagnostic
                             .Create(
                                 new DiagnosticDescriptor(
-                                    "PNSG1002",
+                                    "PSG1002",
                                     "Unsuccessfully parsed settings",
                                     settings.Message,
                                     "Format",
@@ -76,7 +76,7 @@ namespace PermissionsNodeGenerator
                         Diagnostic
                             .Create(
                                 new DiagnosticDescriptor(
-                                    "PNSG0002",
+                                    "PSG0002",
                                     "Source text is null",
                                     "Source text for {0} is null",
                                     "Other",
@@ -185,7 +185,7 @@ namespace PermissionsNodeGenerator
         {
             var diagnostic = Diagnostic.Create(
                 new DiagnosticDescriptor(
-                    "PNSG0001",
+                    "PSG0001",
                     "Unhandled exception thrown while generating source.",
                     e.ToString(),
                     "Other",
@@ -202,7 +202,7 @@ namespace PermissionsNodeGenerator
         {
             var diagnostic = Diagnostic.Create(
                 new DiagnosticDescriptor(
-                    "PNSG1001",
+                    "PSG1001",
                     "Unhandled exception thrown while reading permissions text.",
                     e.ToString(),
                     "Format",

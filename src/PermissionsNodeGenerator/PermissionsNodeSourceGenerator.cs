@@ -110,6 +110,28 @@ namespace PermissionsNodeGenerator
 
                     if (!parseResult.Success)
                     {
+                        Location location;
+                        if (parseResult is PermissionsTextErrorResult errorResult)
+                        {
+                            location = Location.Create(
+                                file.Path,
+                                new TextSpan(),
+                                new LinePositionSpan(
+                                    new LinePosition(
+                                        errorResult.Line,
+                                        errorResult.LinePositionStart),
+                                    new LinePosition(
+                                        errorResult.Line,
+                                        errorResult.LinePositionEnd)));
+                        }
+                        else
+                        {
+                            location = Location.Create(
+                                file.Path,
+                                new TextSpan(),
+                                new LinePositionSpan());
+                        }
+
                         Diagnostic
                             .Create(
                                 new DiagnosticDescriptor(
@@ -121,7 +143,7 @@ namespace PermissionsNodeGenerator
                                         ? DiagnosticSeverity.Warning
                                         : DiagnosticSeverity.Error,
                                     parseResult.Value == null),
-                                Location.Create(file.Path, new TextSpan(), new LinePositionSpan()))
+                                location)
                             .SplitMultilineDiagnostic()
                             .ReportTo(context);
                     }

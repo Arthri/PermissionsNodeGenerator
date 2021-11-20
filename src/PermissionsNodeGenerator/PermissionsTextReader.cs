@@ -66,7 +66,8 @@ namespace PermissionsNodeGenerator
                     {
                         Message = "Invalid indent.",
                         Line = lineNumber,
-                        LinePosition = indentCharCount,
+                        LinePositionStart = indentCharCount / indentCount * indentCount,
+                        LinePositionEnd = indentCharCount,
                     };
                 }
 
@@ -96,7 +97,8 @@ namespace PermissionsNodeGenerator
                         {
                             Message = "Unexpected indent level jump.",
                             Line = lineNumber,
-                            LinePosition = indentCharCount,
+                            LinePositionStart = (depth + 1) * indentCount,
+                            LinePositionEnd = indentCharCount,
                         };
                     }
 
@@ -113,7 +115,8 @@ namespace PermissionsNodeGenerator
                     {
                         Message = "Permissions name is not valid.",
                         Line = lineNumber,
-                        LinePosition = indentCharCount,
+                        LinePositionStart = indentCharCount,
+                        LinePositionEnd = line.Length,
                     };
                 }
 

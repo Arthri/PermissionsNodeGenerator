@@ -15,7 +15,12 @@ namespace PermissionsNodeGenerator.Results.PTextReader
         /// <summary>
         /// Gets the position where the error occured.
         /// </summary>
-        public int LinePosition { get; init; }
+        public int LinePositionStart { get; init; }
+
+        /// <summary>
+        /// Gets the position where the error occured.
+        /// </summary>
+        public int LinePositionEnd { get; init; }
 
         /// <summary>
         /// Gets the exception thrown.

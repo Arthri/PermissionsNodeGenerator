@@ -20,10 +20,10 @@ namespace PermissionsNodeGenerator
         /// </summary>
         public int Position { get; }
 
-        /// <inheritdoc cref="PermissionTextReaderSettings.IndentCharacter"/>
+        /// <inheritdoc cref="PermissionsTextReaderSettings.IndentCharacter"/>
         public char IndentCharacter { get; }
 
-        /// <inheritdoc cref="PermissionTextReaderSettings.IndentCount"/>
+        /// <inheritdoc cref="PermissionsTextReaderSettings.IndentCount"/>
         public int IndentCount { get; }
 
         /// <summary>

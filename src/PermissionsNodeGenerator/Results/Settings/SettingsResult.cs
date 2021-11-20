@@ -1,12 +1,12 @@
 ﻿namespace PermissionsNodeGenerator.Results.Settings
 {
     /// <summary>
-    /// Represents the result of parsing MSBuild metadata to <see cref="PermissionTextReaderSettings"/>.
+    /// Represents the result of parsing MSBuild metadata to <see cref="PermissionsTextReaderSettings"/>.
     /// </summary>
-    public record SettingsResult : IResult<PermissionTextReaderSettings>
+    public record SettingsResult : IResult<PermissionsTextReaderSettings>
     {
         /// <inheritdoc />
-        public PermissionTextReaderSettings? Value { get; init; }
+        public PermissionsTextReaderSettings? Value { get; init; }
 
         /// <inheritdoc />
         object? IResult.Value => Value;

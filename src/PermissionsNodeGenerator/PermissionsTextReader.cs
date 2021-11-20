@@ -7,14 +7,14 @@ namespace PermissionsNodeGenerator
     /// <summary>
     /// Provides methods to read a permission text file.
     /// </summary>
-    public static class PermissionTextReader
+    public static class PermissionsTextReader
     {
         /// <summary>
         /// Parses the specified stream as a permissions document.
         /// </summary>
         /// <param name="lines">The lines to parse.</param>
         /// <returns>An array of permissions nodes representing the parsed document.</returns>
-        public static List<PermissionNode> Parse(IEnumerable<string> lines, PermissionTextReaderSettings? settings = null)
+        public static List<PermissionNode> Parse(IEnumerable<string> lines, PermissionsTextReaderSettings? settings = null)
         {
             // Settings
 

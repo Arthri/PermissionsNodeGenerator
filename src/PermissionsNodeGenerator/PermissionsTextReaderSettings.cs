@@ -1,9 +1,9 @@
 ﻿namespace PermissionsNodeGenerator
 {
     /// <summary>
-    /// Represents settings for <see cref="PermissionTextReader"/>.
+    /// Represents settings for <see cref="PermissionsTextReader"/>.
     /// </summary>
-    public class PermissionTextReaderSettings
+    public class PermissionsTextReaderSettings
     {
         /// <summary>
         /// Gets the character used for indentation.

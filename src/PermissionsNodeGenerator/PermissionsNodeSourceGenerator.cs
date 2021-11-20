@@ -97,7 +97,7 @@ namespace PermissionsNodeGenerator
 
                     try
                     {
-                        nodes = PermissionTextReader.Parse(lines, settings.Value);
+                        nodes = PermissionsTextReader.Parse(lines, settings.Value);
                     }
                     catch (Exception e)
                     {
@@ -120,9 +120,9 @@ namespace PermissionsNodeGenerator
             }
         }
 
-        private static IResult<PermissionTextReaderSettings> CreateSettings(AnalyzerConfigOptions options)
+        private static IResult<PermissionsTextReaderSettings> CreateSettings(AnalyzerConfigOptions options)
         {
-            var settings = new PermissionTextReaderSettings();
+            var settings = new PermissionsTextReaderSettings();
 
             var indentString = options.GetMetadata("IndentCharacter");
             if (indentString == null || indentString.Length == 0)
@@ -168,7 +168,7 @@ namespace PermissionsNodeGenerator
                     {
                         Value = null,
                         Success = false,
-                        Message = $"Exception thrown while parsing {nameof(PermissionTextReaderSettings.IndentCount)}:\n{e}"
+                        Message = $"Exception thrown while parsing {nameof(PermissionsTextReaderSettings.IndentCount)}:\n{e}"
                     };
                 }
             }

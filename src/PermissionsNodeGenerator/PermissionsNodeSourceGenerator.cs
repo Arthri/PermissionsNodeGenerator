@@ -2,6 +2,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using PermissionsNodeGenerator.Extensions;
+using PermissionsNodeGenerator.Results;
+using PermissionsNodeGenerator.Results.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,6 +43,29 @@ namespace PermissionsNodeGenerator
 
                     var settings = CreateSettings(fileOptions);
 
+                    if (!settings.Success)
+                    {
+                        Diagnostic
+                            .Create(
+                                new DiagnosticDescriptor(
+                                    "PNSG1002",
+                                    "Unsuccessfully parsed settings",
+                                    settings.Message,
+                                    "Format",
+                                    settings.Value == null
+                                        ? DiagnosticSeverity.Warning
+                                        : DiagnosticSeverity.Error,
+                                    settings.Value == null),
+                                Location.None)
+                            .SplitMultilineDiagnostic()
+                            .ReportTo(context);
+                    }
+
+                    if (settings.Value == null)
+                    {
+                        continue;
+                    }
+
                     IReadOnlyList<PermissionNode> nodes;
 
 
@@ -72,7 +97,7 @@ namespace PermissionsNodeGenerator
 
                     try
                     {
-                        nodes = PermissionTextReader.Parse(lines, settings);
+                        nodes = PermissionTextReader.Parse(lines, settings.Value);
                     }
                     catch (Exception e)
                     {
@@ -95,7 +120,7 @@ namespace PermissionsNodeGenerator
             }
         }
 
-        private static PermissionTextReaderSettings CreateSettings(AnalyzerConfigOptions options)
+        private static IResult<PermissionTextReaderSettings> CreateSettings(AnalyzerConfigOptions options)
         {
             var settings = new PermissionTextReaderSettings();
 
@@ -118,7 +143,12 @@ namespace PermissionsNodeGenerator
             }
             else
             {
-                throw new FormatException($"IndentCharacter must be a 1 character-long string");
+                return new SettingsResult
+                {
+                    Value = null,
+                    Success = false,
+                    Message = "IndentCharacter must be a 1 character-long string."
+                };
             }
 
             var indentCountString = options.GetMetadata("IndentCount");
@@ -128,10 +158,27 @@ namespace PermissionsNodeGenerator
             }
             else
             {
-                settings.IndentCount = int.Parse(indentCountString);
+                try
+                {
+                    settings.IndentCount = int.Parse(indentCountString);
+                }
+                catch (Exception e)
+                {
+                    return new SettingsResult
+                    {
+                        Value = null,
+                        Success = false,
+                        Message = $"Exception thrown while parsing {nameof(PermissionTextReaderSettings.IndentCount)}:\n{e}"
+                    };
+                }
             }
 
-            return settings;
+            return new SettingsResult
+            {
+                Value = settings,
+                Success = true,
+                Message = "Successfully parsed settings."
+            };
         }
 
         private static void ReportUnhandledExceptionDiagnostic(GeneratorExecutionContext context, Exception e)

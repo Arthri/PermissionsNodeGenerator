@@ -14,7 +14,7 @@ namespace PermissionsNodeGenerator
         /// </summary>
         /// <param name="lines">The lines to parse.</param>
         /// <returns>An array of permissions nodes representing the parsed document.</returns>
-        public static List<PermissionNode> Parse(IEnumerable<string> lines, PermissionsTextReaderSettings? settings = null)
+        public static IList<PermissionNode> Parse(IEnumerable<string> lines, PermissionsTextReaderSettings? settings = null)
         {
             // Settings
 
